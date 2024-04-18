@@ -1,3 +1,4 @@
+import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/view/room_details.dart';
 import 'package:find_your_room_nepal/view/see_all_room.dart';
 import 'package:find_your_room_nepal/view/upload_room.dart';
@@ -154,8 +155,11 @@ class _MyWidgetState extends State<HomeScreen> {
                               children: [
                                 ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      "assets/house.jpg",
+                                    child: Image.network(
+                                      AppUrl.primaryUrl +
+                                          value.roomList[index]
+                                                  ['gallery_images'][0]['image']
+                                              .toString(),
                                       width: 200,
                                       height: 300,
                                       fit: BoxFit.cover,
