@@ -26,18 +26,22 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
         backgroundColor: Colors.indigo,
         title: Text("Room Detail"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMainImageSection(context),
-            _buildDescriptionSection(),
-            _buildFacilitiesSection(),
-            _buildOwnerSection(),
-            _buildGallerySection(context)
-          ],
-        ),
+      body: Consumer<RoomViewModel>(
+        builder: (context, value, child) => value.roomLoader
+            ? Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildMainImageSection(context),
+                    _buildDescriptionSection(),
+                    _buildFacilitiesSection(),
+                    _buildOwnerSection(),
+                    _buildGallerySection(context)
+                  ],
+                ),
+              ),
       ),
     );
   }

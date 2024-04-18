@@ -40,6 +40,9 @@ class RoomViewModel extends ChangeNotifier {
 
   set roomData(value) => this._roomData = value;
 
+
+  
+
   getRoomByID(BuildContext context, dynamic roomId) async {
     setRoomLoader(true);
     try {
