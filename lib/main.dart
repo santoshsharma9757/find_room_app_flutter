@@ -3,9 +3,13 @@ import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox("AuthBox");
   runApp(MyApp());
 }
 
@@ -24,7 +28,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primaryColor: Colors.indigo),
+        theme: ThemeData(primaryColor: Colors.indigo,
+        ),
         home: LoginScreen(),
       ),
     );

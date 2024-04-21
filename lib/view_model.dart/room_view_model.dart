@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/repository/room_repo.dart';
 import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 class RoomViewModel extends ChangeNotifier {
   final _roomRepo = RoomRepository();
+  final _appUrl = AppUrl();
 
   List _roomList = [];
   List get roomList => _roomList;
@@ -17,6 +19,11 @@ class RoomViewModel extends ChangeNotifier {
   setRoomLoader(value) {
     _roomLoader = value;
     notifyListeners();
+  }
+
+  initCall(BuildContext context) async {
+    await getRoom(context);
+    await getUserDetail(context);
   }
 
   getRoom(BuildContext context) async {
@@ -36,12 +43,9 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   Map<String, dynamic> _roomData = {};
-  get roomData => this._roomData;
+  get roomData => _roomData;
 
-  set roomData(value) => this._roomData = value;
-
-
-  
+  set roomData(value) => _roomData = value;
 
   getRoomByID(BuildContext context, dynamic roomId) async {
     setRoomLoader(true);
@@ -95,6 +99,52 @@ class RoomViewModel extends ChangeNotifier {
         Navigator.pop(context);
       }
     } catch (e) {
+      log('Erroer $e');
+    }
+  }
+
+  //GET USER DETAIL
+
+  Map<String, dynamic> _userData = {};
+  Map get userData => _userData;
+
+  set userData(value) => _userData = value;
+
+  getUserDetail(BuildContext context) async {
+    // var userId = await _appUrl.readUserId();
+    setRoomLoader(true);
+    try {
+      final response = await _roomRepo.getUserDetail(context);
+      log("SSSUSER DETAILS:$response");
+      _userData = response;
+
+      setRoomLoader(false);
+
+      notifyListeners();
+    } catch (e) {
+      setRoomLoader(false);
+      log('Erroer $e');
+    }
+  }
+
+  List _userRooms = [];
+  List get userRooms => _userRooms;
+
+  set userRooms(List value) => _userRooms = value;
+
+  getUserRooms(BuildContext context) async {
+    var userId = await _appUrl.readUserId();
+    setRoomLoader(true);
+    try {
+      final response = await _roomRepo.getUserRooms(context, userId);
+      log("UserRooms:$response");
+      _userRooms = response;
+
+      setRoomLoader(false);
+
+      notifyListeners();
+    } catch (e) {
+      setRoomLoader(false);
       log('Erroer $e');
     }
   }

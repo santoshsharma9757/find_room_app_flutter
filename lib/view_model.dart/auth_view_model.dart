@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/repository/auth_repo.dart';
 import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view/main_screen.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final _authRepo = AuthRepository();
+  final _appUrl = AppUrl();
 
   bool _isLoading = false;
   get isLoading => _isLoading;
@@ -94,7 +96,6 @@ class AuthViewModel extends ChangeNotifier {
   final TextEditingController loginEmailController = TextEditingController();
   final TextEditingController loginPasswordController = TextEditingController();
 
-
   bool _loginLoader = false;
   get loginLoader => _loginLoader;
 
@@ -103,7 +104,6 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   loginUser(BuildContext context) async {
     log("MOBILE NUMBER ${mobileController.text}");
     var bodyToSend = {
@@ -111,13 +111,15 @@ class AuthViewModel extends ChangeNotifier {
       "password": loginPasswordController.text
     };
 
-     log("RESPONSE USER Login: $bodyToSend");
+    log("RESPONSE USER Login: $bodyToSend");
 
     setLoginLoader(true);
     try {
       final response = await _authRepo.loginUser(context, bodyToSend);
       log("RESPONSE USER Login: $response");
       if (response != null) {
+        _appUrl.storeToken(response['token']['access']);
+        _appUrl.storeUserId(response['user']);
         Utils.snackBar("User Login Successfully".toString(), context);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return HomeScreen();

@@ -1,4 +1,26 @@
-class AppUrl{
-  static final primaryUrl='http://192.168.1.71:8000/';
-  static final token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzNTA5MTEzLCJpYXQiOjE3MTM0MjI3MTMsImp0aSI6IjZjMjhiZDg3YWFiZjQwYTA5MmVlZjJkNGQ2OGRjN2QwIiwidXNlcl9pZCI6IjY3NWU5YzkzLWE1NmEtNDZkOS1iODc0LTAxYWY0MmM5NjdkMCJ9.CSJJTktM3WeYHGCzknZWcVL838kuD3taO3AdH9TOnF0';
+import 'package:hive_flutter/hive_flutter.dart';
+
+class AppUrl {
+  static final primaryUrl = 'http://192.168.1.65:8000/';
+  static final token = '';
+
+  static final todoBox = Hive.box('AuthBox');
+
+  storeToken(String token) {
+    todoBox.put("token", token);
+  }
+
+  readToken() async {
+    var token = await todoBox.get('token');
+    return token;
+  }
+
+  storeUserId(String userId) {
+    todoBox.put("userId", userId);
+  }
+
+  readUserId() async {
+    var token = await todoBox.get('userId');
+    return token;
+  }
 }

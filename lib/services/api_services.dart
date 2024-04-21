@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NetworkApiService {
+  final _appUrl = AppUrl();
   Future getGetApiResponse(String url) async {
     dynamic responseJson;
     try {
@@ -23,12 +24,18 @@ class NetworkApiService {
   }
 
   Future getGetApiResponseWithToken(String url) async {
+    var token = await _appUrl.readToken();
+    log("SSSSTOKEN:$token");
     dynamic responseJson;
+    var headersTobeSend = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+
+    log("AAASSESSS:$headersTobeSend");
+
     try {
-      final response = await http.get(Uri.parse(url), headers: {
-        "Accept": "application/json",
-        "Authorization": "Token ${AppUrl.token}"
-      }).timeout(const Duration(seconds: 10));
+      final response = await http.get(Uri.parse(url), headers: headersTobeSend);
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');

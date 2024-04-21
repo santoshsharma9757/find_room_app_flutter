@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
@@ -85,59 +87,68 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
   }
 
   _buildOwnerSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        Card(
-          color: Colors.blueGrey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      child: Text("S"),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "SANTOSH",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, color: Colors.white),
+    return Consumer<RoomViewModel>(
+      builder: (context, value, child) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Card(
+            color: Colors.blueGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        child: Text(value.roomData['user']['name'][0]),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            value.roomData['user']['name'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white),
+                          ),
+                          Text(
+                            "Owner",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.indigo,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: GestureDetector(
+                        onTap: () {
+                          log(value.roomData['user']['mobile']);
+                        },
+                        child: Icon(
+                          Icons.call,
+                          color: Colors.white,
                         ),
-                        Text(
-                          "Owner",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, color: Colors.white),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Icon(
-                      Icons.call,
-                      color: Colors.white,
-                    ))
-              ],
+                      ))
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

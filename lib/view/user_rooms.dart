@@ -1,21 +1,20 @@
-import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/view/room_details.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SeeAllRoomScreen extends StatefulWidget {
-  const SeeAllRoomScreen({super.key});
+class YourRoomsScreen extends StatefulWidget {
+  const YourRoomsScreen({super.key});
 
   @override
-  State<SeeAllRoomScreen> createState() => _SeeAllRoomScreenState();
+  State<YourRoomsScreen> createState() => _YourRoomsScreenState();
 }
 
-class _SeeAllRoomScreenState extends State<SeeAllRoomScreen> {
+class _YourRoomsScreenState extends State<YourRoomsScreen> {
   @override
   void initState() {
     final provider = Provider.of<RoomViewModel>(context, listen: false);
-    provider.getRoom(context);
+    provider.getUserRooms(context);
     super.initState();
   }
 
@@ -24,10 +23,10 @@ class _SeeAllRoomScreenState extends State<SeeAllRoomScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: const Text('Rooms'),
+        title: const Text('Your Rooms'),
       ),
       body: Consumer<RoomViewModel>(
-        builder: (context, value, child) => value.roomList.isEmpty
+        builder: (context, value, child) => value.userRooms.isEmpty
             ? Center(child: CircularProgressIndicator())
             : GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -35,14 +34,14 @@ class _SeeAllRoomScreenState extends State<SeeAllRoomScreen> {
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
                 ),
-                itemCount: value.roomList.length,
+                itemCount: value.userRooms.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return RoomDetailScreen(
-                          roomId: value.roomList[index]['id'],
+                          roomId: value.userRooms[index]['id'],
                         );
                       }));
                     },
@@ -52,11 +51,8 @@ class _SeeAllRoomScreenState extends State<SeeAllRoomScreen> {
                         children: [
                           ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                AppUrl.primaryUrl +
-                                          value.roomList[index]
-                                                  ['gallery_images'][0]['image']
-                                              .toString(),
+                              child: Image.asset(
+                                "assets/house.jpg",
                                 width: 200,
                                 height: 300,
                                 fit: BoxFit.cover,
@@ -67,14 +63,14 @@ class _SeeAllRoomScreenState extends State<SeeAllRoomScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  value.roomList[index]['district'],
+                                  value.userRooms[index]['district'],
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       backgroundColor: Colors.red),
                                 ),
                                 Text(
-                                  value.roomList[index]['price'].toString(),
+                                  value.userRooms[index]['price'].toString(),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

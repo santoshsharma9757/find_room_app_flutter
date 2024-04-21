@@ -2,6 +2,7 @@ import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/view/room_details.dart';
 import 'package:find_your_room_nepal/view/see_all_room.dart';
 import 'package:find_your_room_nepal/view/upload_room.dart';
+import 'package:find_your_room_nepal/view/user_rooms.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class _MyWidgetState extends State<HomeScreen> {
   @override
   void initState() {
     final provider = Provider.of<RoomViewModel>(context, listen: false);
-    provider.getRoom(context);
+    provider.initCall(context);
     super.initState();
   }
 
@@ -50,71 +51,77 @@ class _MyWidgetState extends State<HomeScreen> {
   }
 
   _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.indigo,
+    return Consumer<RoomViewModel>(
+      builder: (context, value, child) => value.userData.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.indigo,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.person,
+                            size: 30,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          value.userData['name'],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          value.userData['mobile'],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.home),
+                    title: Text('Home'),
+                    onTap: () {
+                      // Handle Home item tap
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.apartment),
+                    title: Text('Your Rooms'),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return YourRoomsScreen();
+                      }));
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.logout),
+                    title: Text('Logout'),
+                    onTap: () {
+                      // Handle Logout item tap
+                      Navigator.pop(context);
+                      // Add your logout logic here
+                    },
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 30,
-                    color: Colors.blue,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'John Doe',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  'john.doe@example.com',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () {
-              // Handle Home item tap
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.apartment),
-            title: Text('Your Post Room'),
-            onTap: () {
-              // Handle Your Post Room item tap
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
-            onTap: () {
-              // Handle Logout item tap
-              Navigator.pop(context);
-              // Add your logout logic here
-            },
-          ),
-        ],
-      ),
     );
   }
 
