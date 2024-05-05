@@ -94,17 +94,19 @@ class RoomViewModel extends ChangeNotifier {
   uploadRoom(BuildContext context) async {
     var bodyToSend = {
       "city": "Kathmandu",
-      "district": "Kathmandu",
+      "district": selectedDistrict.toString(),
       "address": addressController.text,
       "price": priceController.text,
       "description": descriptionController.text,
     };
 
+    log("UPLOAD BODYTOSEND $bodyToSend");
+
     try {
       final response = await _roomRepo.uploadRoom(context, bodyToSend, images!);
       log("RESPONSE USER upload: $response");
       if (response != null) {
-        Utils.snackBar(response['data'].toString(), context);
+        Utils.snackBar("Room posted successfully!!!", context);
         Navigator.pop(context);
       }
     } catch (e) {
@@ -120,6 +122,7 @@ class RoomViewModel extends ChangeNotifier {
   set userData(value) => _userData = value;
 
   getUserDetail(BuildContext context) async {
+    _selectedDistrict="";
     setRoomLoader(true);
     try {
       final response = await _roomRepo.getUserDetail(context);

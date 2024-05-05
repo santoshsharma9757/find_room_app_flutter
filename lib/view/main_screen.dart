@@ -134,78 +134,83 @@ class _MyWidgetState extends State<HomeScreen> {
     return Consumer<RoomViewModel>(
       builder: (context, value, child) => value.roomLoader
           ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildheadingTitle("Nearest for you"),
-                      _buildseeAll()
-                    ],
-                  ),
+          : value.roomList.isEmpty
+              ? SizedBox(
+                 height: MediaQuery.of(context).size.height * 0.33,
+                child: Center(child: Text("No Data Available",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.indigo),)))
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildheadingTitle("Nearest for you"),
+                          _buildseeAll()
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.33,
+                      child: ListView.builder(
+                          itemCount: value.roomList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return RoomDetailScreen(
+                                    roomId: value.roomList[index]['id'],
+                                  );
+                                }));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          AppUrl.primaryUrl +
+                                              value.roomList[index]
+                                                      ['gallery_images'][0]
+                                                      ['image']
+                                                  .toString(),
+                                          width: 200,
+                                          height: 300,
+                                          fit: BoxFit.cover,
+                                        )),
+                                    Positioned(
+                                      bottom: 10,
+                                      left: 30,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            value.roomList[index]['district'],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                backgroundColor: Colors.red),
+                                          ),
+                                          Text(
+                                            value.roomList[index]['price'],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                backgroundColor: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.33,
-                  child: ListView.builder(
-                      itemCount: value.roomList.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return RoomDetailScreen(
-                                roomId: value.roomList[index]['id'],
-                              );
-                            }));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      AppUrl.primaryUrl +
-                                          value.roomList[index]
-                                                  ['gallery_images'][0]['image']
-                                              .toString(),
-                                      width: 200,
-                                      height: 300,
-                                      fit: BoxFit.cover,
-                                    )),
-                                Positioned(
-                                  bottom: 10,
-                                  left: 30,
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        value.roomList[index]['district'],
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            backgroundColor: Colors.red),
-                                      ),
-                                      Text(
-                                        value.roomList[index]['price'],
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            backgroundColor: Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                )
-              ],
-            ),
     );
   }
 

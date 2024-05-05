@@ -45,7 +45,7 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                 const SizedBox(
                   height: 5,
                 ),
-                Consumer<AuthViewModel>(
+                Consumer<RoomViewModel>(
                   builder: (context, value, child) => Stack(
                     children: [
                       Padding(
@@ -74,8 +74,8 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                                 );
                               }).toList(),
                               onChanged: (value) {
-                                authprovider
-                                    .setSelectedDistrict(value.toString());
+                                provider
+                                    .setSelectedDistrict(value.toString(),context);
                               },
                             ),
                           ),
@@ -186,7 +186,7 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                 const SizedBox(height: 16),
                 Consumer<RoomViewModel>(
                   builder: (context, value, child) => SizedBox(
-                    height: value.images!.isEmpty ? 5 : 100,
+                    height: value.images!.isEmpty ? 5 : 150,
                     child: GridView.builder(
                       itemCount: value.images?.length ??
                           0, // Handle null or empty list
@@ -200,6 +200,7 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                     ),
                   ),
                 ),
+              
                 Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
