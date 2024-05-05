@@ -187,7 +187,6 @@ class RoomViewModel extends ChangeNotifier {
       setIsDistrictLoading(false);
       log("CityResponse $response ");
       _districtList = response['data'];
-      _selectedDistrict = _districtList.first.toString();
 
       notifyListeners();
     } catch (e) {
