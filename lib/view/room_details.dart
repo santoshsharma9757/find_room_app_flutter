@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:find_your_room_nepal/constant/api_url.dart';
+import 'package:find_your_room_nepal/view/full_screen_image.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 
 class RoomDetailScreen extends StatefulWidget {
@@ -20,6 +20,13 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     provider.getRoomByID(context, widget.roomId);
     super.initState();
   }
+
+  List facilities = ["Washroom", "Bedroom", "Kitchen"];
+
+  callNumber(String mobileNumber) async{
+  // String number = mobileNumber; //set the number here
+  bool res = await FlutterPhoneDirectCaller.callNumber(mobileNumber)??false;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -66,18 +73,29 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: value.roomData['gallery_images'].length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          AppUrl.primaryUrl +
-                              value.roomData['gallery_images'][index]['image']
-                                  .toString(),
-                          width: MediaQuery.of(context).size.width * 0.30,
-                          height: MediaQuery.of(context).size.height * 0.12,
-                          fit: BoxFit.cover,
-                        )),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return FullScreenImage(
+                            imagepath: value.roomData['gallery_images'][index]
+                                    ['image']
+                                .toString());
+                      }));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            AppUrl.primaryUrl +
+                                value.roomData['gallery_images'][index]['image']
+                                    .toString(),
+                            width: MediaQuery.of(context).size.width * 0.30,
+                            height: MediaQuery.of(context).size.height * 0.12,
+                            fit: BoxFit.cover,
+                          )),
+                    ),
                   );
                 }),
           )
@@ -136,7 +154,8 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                           borderRadius: BorderRadius.circular(8)),
                       child: GestureDetector(
                         onTap: () {
-                          log(value.roomData['user']['mobile']);
+                          callNumber(value.roomData['user']['mobile']);
+                       
                         },
                         child: Icon(
                           Icons.call,
@@ -166,7 +185,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
         Wrap(
           spacing: 10.0, // Adjust the spacing between the Text widgets
           runSpacing: 10.0, // Adjust the run spacing (spacing between lines)
-          children: List.generate(10, (index) {
+          children: List.generate(facilities.length, (index) {
             return Container(
               decoration: BoxDecoration(
                   color: Colors.indigo,
@@ -174,7 +193,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Text ${index + 1}",
+                  facilities[index],
                   style: TextStyle(color: Colors.white),
                 ),
               ),

@@ -69,7 +69,7 @@ class AuthViewModel extends ChangeNotifier {
     var bodyToSend = {
       "name": nameController.text,
       "email": emailController.text,
-      "mobile": "+919839843995",
+      "mobile": "+977${mobileController.text}",
       "city": _selectedDistrict,
       "district": _selectedDistrict,
       "address": addressController.text,

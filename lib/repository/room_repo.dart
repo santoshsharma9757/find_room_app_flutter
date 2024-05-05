@@ -27,7 +27,6 @@ class RoomRepository {
   }
 
   getRooms(context) async {
-    
     try {
       final response = await _networkService
           .getGetApiResponseWithToken('${AppUrl.primaryUrl}api/room/')
@@ -44,8 +43,25 @@ class RoomRepository {
     }
   }
 
-    getUserDetail(context) async {
-    
+  getRoomsByDistrict(BuildContext context, String district) async {
+    try {
+      final response = await _networkService
+          .getGetApiResponseWithToken(
+              '${AppUrl.primaryUrl}api/room/?district=$district')
+          .catchError((error, stackTrace) {
+        Utils.showMyDialog(error.toString(), context);
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  getUserDetail(context) async {
     try {
       final response = await _networkService
           .getGetApiResponseWithToken('${AppUrl.primaryUrl}api/user/profile/')
@@ -62,12 +78,11 @@ class RoomRepository {
     }
   }
 
-
-  getUserRooms(context,String userId) async {
-    
+  getUserRooms(context, String userId) async {
     try {
       final response = await _networkService
-          .getGetApiResponseWithToken('${AppUrl.primaryUrl}api/room/user/$userId')
+          .getGetApiResponseWithToken(
+              '${AppUrl.primaryUrl}api/room/user/$userId')
           .catchError((error, stackTrace) {
         Utils.showMyDialog(error.toString(), context);
         if (kDebugMode) {

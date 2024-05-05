@@ -3,6 +3,7 @@
 import 'package:find_your_room_nepal/constant/app_text.dart';
 import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 
@@ -115,6 +116,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 50,
                         child: TextField(
                           controller: value.mobileController,
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                          ],
                           decoration: InputDecoration(
                               prefixIcon: Icon(Icons.phone),
                               border: OutlineInputBorder(

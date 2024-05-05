@@ -22,16 +22,21 @@ class _MyWidgetState extends State<HomeScreen> {
     super.initState();
   }
 
+  List facilities = ["Washroom", "Bedroom"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: _buildDrawer(context),
-      body: Column(
-        children: [
-          _buildNearestForyou(),
-          _buildBestForyou(),
-        ],
+      body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            _buildNearestForyou(),
+            _buildBestForyou(),
+          ],
+        ),
       ),
       floatingActionButton: Container(
         margin: const EdgeInsets.only(bottom: 50.0),
@@ -142,7 +147,7 @@ class _MyWidgetState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.33,
                   child: ListView.builder(
                       itemCount: value.roomList.length,
                       scrollDirection: Axis.horizontal,
@@ -205,88 +210,115 @@ class _MyWidgetState extends State<HomeScreen> {
   }
 
   _buildBestForyou() {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [_buildheadingTitle("Best For You"), _buildseeAll()],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.45,
-            child: ListView.builder(
-                itemCount: 4,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return RoomDetailScreen(
-                          roomId: "",
-                        );
-                      }));
-                    },
-                    child: Card(
-                      color: Colors.blueGrey.shade400,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  "assets/house.jpg",
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.30,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.12,
-                                  fit: BoxFit.cover,
-                                )),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.57,
-                                  child: const Text(
-                                    "Kathmandu",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+    return IgnorePointer(
+      ignoring: true,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildheadingTitle("Best For You"),
+                      _buildseeAll()
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  child: ListView.builder(
+                      itemCount: 4,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return RoomDetailScreen(
+                                roomId: "",
+                              );
+                            }));
+                          },
+                          child: Card(
+                            color: Colors.blueGrey.shade400,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        "assets/house.jpg",
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.30,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.12,
+                                        fit: BoxFit.cover,
+                                      )),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text(
-                                "RS:5000",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
-                              ),
-                              _buildFacilitiesSection()
-                            ],
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.57,
+                                        child: const Text(
+                                          "Kathmandu",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    const Text(
+                                      "RS:5000",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white),
+                                    ),
+                                    _buildFacilitiesSection()
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
+                        );
+                      }),
+                )
+              ],
+            ),
+            Positioned(
+                top: 200,
+                left: 150,
+                child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text("COMMING SOON!!!!"),
                       ),
-                    ),
-                  );
-                }),
-          )
-        ],
+                    )))
+          ],
+        ),
       ),
     );
   }
@@ -322,7 +354,7 @@ class _MyWidgetState extends State<HomeScreen> {
         Wrap(
           spacing: 10.0, // Adjust the spacing between the Text widgets
           runSpacing: 10.0, // Adjust the run spacing (spacing between lines)
-          children: List.generate(3, (index) {
+          children: List.generate(facilities.length, (index) {
             return Container(
               decoration: BoxDecoration(
                   color: Colors.indigo,
@@ -330,7 +362,7 @@ class _MyWidgetState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Text ${index + 1}",
+                  facilities[index],
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
@@ -351,68 +383,69 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  String selectedOption = ''; // Default selected option
-  List districtList = ["Kathmandu", "Pokhara"];
-  String selectedDistrict = "Kathmandu";
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<RoomViewModel>(context);
     return SafeArea(
-      child: Container(
-          height: 60,
-          width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(color: Colors.indigo),
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    // Open the drawer here
-                    Scaffold.of(context).openDrawer();
-                  },
-                  child: CircleAvatar(
-                    radius: 30,
-                    child: Text("S"),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.white),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: selectedDistrict,
-                      iconEnabledColor: Colors.white,
-                      dropdownColor: Colors.indigo.shade400,
-                      items: districtList.map((e) {
-                        return DropdownMenuItem(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              e.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          value: e,
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedDistrict = value.toString();
-                        });
-                      },
+      child: Consumer<RoomViewModel>(
+        builder: (context, value, child) => Container(
+            height: 60,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(color: Colors.indigo),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Open the drawer here
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: Consumer<RoomViewModel>(
+                      builder: (context, value, child) => CircleAvatar(
+                        radius: 30,
+                        child: Text(value.userData['name'][0]),
+                      ),
                     ),
                   ),
-                )
-              ],
-            ),
-          )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.white),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: value.selectedDistrict,
+                        iconEnabledColor: Colors.white,
+                        dropdownColor: Colors.indigo.shade400,
+                        items: value.districtList.map((e) {
+                          return DropdownMenuItem(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                e.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            value: e,
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          provider.setSelectedDistrict(
+                              value.toString(), context);
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

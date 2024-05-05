@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:find_your_room_nepal/constant/api_url.dart';
+import 'package:find_your_room_nepal/repository/auth_repo.dart';
 import 'package:find_your_room_nepal/repository/room_repo.dart';
 import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +23,23 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   initCall(BuildContext context) async {
-    await getRoom(context);
     await getUserDetail(context);
+    await getDistrict(context);
+    await getRoom(context);
   }
 
-  getRoom(BuildContext context) async {
+  getRoom(BuildContext context, [bool? isDropdownChanged]) async {
     setRoomLoader(true);
     try {
-      final response = await _roomRepo.getRooms(context);
+      var response;
+      if (isDropdownChanged == false) {
+        // response = await _roomRepo.getRooms(context);
+        response =
+            await _roomRepo.getRoomsByDistrict(context, selectedDistrict);
+      } else {
+        response =
+            await _roomRepo.getRoomsByDistrict(context, selectedDistrict);
+      }
       _roomList = response['data'];
 
       setRoomLoader(false);
@@ -88,7 +98,6 @@ class RoomViewModel extends ChangeNotifier {
       "address": addressController.text,
       "price": priceController.text,
       "description": descriptionController.text,
-      // "user": "09f6435f-68d9-48bf-8077-fe934083821d"
     };
 
     try {
@@ -111,12 +120,12 @@ class RoomViewModel extends ChangeNotifier {
   set userData(value) => _userData = value;
 
   getUserDetail(BuildContext context) async {
-    // var userId = await _appUrl.readUserId();
     setRoomLoader(true);
     try {
       final response = await _roomRepo.getUserDetail(context);
       log("SSSUSER DETAILS:$response");
       _userData = response;
+      _selectedDistrict = userData['district'];
 
       setRoomLoader(false);
 
@@ -139,12 +148,50 @@ class RoomViewModel extends ChangeNotifier {
       final response = await _roomRepo.getUserRooms(context, userId);
       log("UserRooms:$response");
       _userRooms = response;
-
       setRoomLoader(false);
-
       notifyListeners();
     } catch (e) {
       setRoomLoader(false);
+      log('Erroer $e');
+    }
+  }
+
+  //
+  bool _isDistrictLoading = false;
+  bool get isDistrictLoading => this._isDistrictLoading;
+
+  List _districtList = [];
+  List get districtList => _districtList;
+
+  set districtList(value) => _districtList = value;
+
+  String _selectedDistrict = "";
+  get selectedDistrict => this._selectedDistrict;
+
+  setSelectedDistrict(value, BuildContext context) {
+    _selectedDistrict = value;
+    getRoom(context, true);
+    notifyListeners();
+  }
+
+  setIsDistrictLoading(bool value) {
+    _isDistrictLoading = value;
+    notifyListeners();
+  }
+
+  final _authRepo = AuthRepository();
+  getDistrict(BuildContext context) async {
+    setIsDistrictLoading(true);
+    try {
+      final response = await _authRepo.getDistrict(context);
+      setIsDistrictLoading(false);
+      log("CityResponse $response ");
+      _districtList = response['data'];
+      _selectedDistrict = _districtList.first.toString();
+
+      notifyListeners();
+    } catch (e) {
+      setIsDistrictLoading(false);
       log('Erroer $e');
     }
   }
