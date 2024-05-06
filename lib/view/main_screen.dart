@@ -1,4 +1,5 @@
 import 'package:find_your_room_nepal/constant/api_url.dart';
+import 'package:find_your_room_nepal/view/login_screen.dart';
 import 'package:find_your_room_nepal/view/room_details.dart';
 import 'package:find_your_room_nepal/view/see_all_room.dart';
 import 'package:find_your_room_nepal/view/upload_room.dart';
@@ -24,6 +25,8 @@ class _MyWidgetState extends State<HomeScreen> {
 
   List facilities = ["Washroom", "Bedroom"];
 
+  final _appUrl = AppUrl();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +46,7 @@ class _MyWidgetState extends State<HomeScreen> {
         child: FloatingActionButton.extended(
           elevation: 50,
           onPressed: () {
+            _appUrl.storeToken("");
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return UploadYourRoomScreen();
             }));
@@ -119,14 +123,82 @@ class _MyWidgetState extends State<HomeScreen> {
                     leading: Icon(Icons.logout),
                     title: Text('Logout'),
                     onTap: () {
-                      // Handle Logout item tap
-                      Navigator.pop(context);
-                      // Add your logout logic here
+                      _logoutAlert();
                     },
                   ),
                 ],
               ),
             ),
+    );
+  }
+
+  _logoutAlert() async {
+    return showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(builder: (context, setter) {
+        return AlertDialog(
+          title: Text('Warning'),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            setter = setState;
+            return Text(
+              'Are you sure to Logout?',
+            );
+          }),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            SizedBox(
+              height: 35,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(
+                      width: .5,
+                      color: Colors.indigo,
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return LoginScreen();
+                  }));
+                },
+                child: Text(
+                  'Yes',
+                  style: TextStyle(fontSize: 14, color: Colors.indigo),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 35,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(
+                      width: .5,
+                      color: Colors.indigo,
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'No',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.indigo,
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      }),
     );
   }
 
@@ -136,8 +208,15 @@ class _MyWidgetState extends State<HomeScreen> {
           ? Center(child: CircularProgressIndicator())
           : value.roomList.isEmpty
               ? SizedBox(
-                 height: MediaQuery.of(context).size.height * 0.33,
-                child: Center(child: Text("No Data Available",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.indigo),)))
+                  height: MediaQuery.of(context).size.height * 0.33,
+                  child: Center(
+                      child: Text(
+                    "No Data Available",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.indigo),
+                  )))
               : Column(
                   children: [
                     Padding(

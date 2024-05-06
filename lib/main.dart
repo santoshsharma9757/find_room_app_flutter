@@ -64,8 +64,9 @@ class _SessionHandlerState extends State<SessionHandler> {
 
   @override
   Widget build(BuildContext context) {
-    if (token == null) {
+    if (token == null|| token=="") {
       return const LoginScreen();
+      
     } else {
       return const HomeScreen();
     }

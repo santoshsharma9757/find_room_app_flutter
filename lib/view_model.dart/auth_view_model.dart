@@ -121,6 +121,8 @@ class AuthViewModel extends ChangeNotifier {
         _appUrl.storeToken(response['token']['access']);
         _appUrl.storeUserId(response['user']);
         Utils.snackBar("User Login Successfully".toString(), context);
+        loginEmailController.text="";
+        loginPasswordController.text="";
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return HomeScreen();
         }));

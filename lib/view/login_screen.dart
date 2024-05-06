@@ -16,6 +16,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
 
+
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthViewModel>(context, listen: false);
