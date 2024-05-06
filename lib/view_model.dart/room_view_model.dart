@@ -28,7 +28,7 @@ class RoomViewModel extends ChangeNotifier {
     await getRoom(context);
   }
 
-  getRoom(BuildContext context, [bool? isDropdownChanged]) async {
+  getRoom(BuildContext context, [bool isDropdownChanged=false]) async {
     setRoomLoader(true);
     try {
       var response;
@@ -107,6 +107,7 @@ class RoomViewModel extends ChangeNotifier {
       log("RESPONSE USER upload: $response");
       if (response != null) {
         Utils.snackBar("Room posted successfully!!!", context);
+        getRoom(context);
         Navigator.pop(context);
       }
     } catch (e) {
