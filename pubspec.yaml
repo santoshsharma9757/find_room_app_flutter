@@ -43,6 +43,7 @@ dependencies:
   hive_flutter: ^1.1.0
   image_picker: ^1.0.4
   flutter_phone_direct_caller: ^2.1.1
+  khalti_flutter: ^2.2.1
 
 dev_dependencies:
   flutter_test:

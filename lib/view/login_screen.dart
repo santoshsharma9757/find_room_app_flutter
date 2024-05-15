@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.black,
                               ),
                               children: <TextSpan>[
-                                TextSpan(text: "Don't have account "),
+                                TextSpan(text: "Don't have account ? "),
                                 TextSpan(
                                   text: 'Signup',
                                   style: TextStyle(

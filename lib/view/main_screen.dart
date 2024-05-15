@@ -1,8 +1,8 @@
 import 'package:find_your_room_nepal/constant/api_url.dart';
+import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view/login_screen.dart';
 import 'package:find_your_room_nepal/view/room_details.dart';
 import 'package:find_your_room_nepal/view/see_all_room.dart';
-import 'package:find_your_room_nepal/view/upload_room.dart';
 import 'package:find_your_room_nepal/view/user_rooms.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +47,11 @@ class _MyWidgetState extends State<HomeScreen> {
           elevation: 50,
           onPressed: () {
             _appUrl.storeToken("");
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return UploadYourRoomScreen();
-            }));
+            Utils.showSubscriptionDialog(
+                "Unlock premium features with our subscription plan.Rs:10/Month"
+                    .toString(),
+                "Subscribe Now",
+                context);
           },
           icon: const Icon(Icons.add),
           label: const Text('Post'),
