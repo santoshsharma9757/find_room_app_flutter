@@ -10,7 +10,8 @@ class Utils {
         SnackBar(backgroundColor: Colors.red, content: Text(message)));
   }
 
-  static showMyDialog(String message, BuildContext context, [String? title]) {
+  static showMyDialog(String message, BuildContext context,
+      [String? title = ""]) {
     return showDialog(
       context: context,
       // barrierDismissible: false, // user must tap button!
@@ -240,7 +241,7 @@ class Utils {
 
 _buildExpansionTile() {
   return Consumer<RoomViewModel>(
-    builder: (context, value, child) => Padding(
+    builder: (context, providerData, child) => Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,33 +253,43 @@ _buildExpansionTile() {
               style: TextStyle(fontSize: 13),
             ),
             onExpansionChanged: (valuedata) {
-              value.setIsExpanded(valuedata);
+              providerData.setIsExpanded(valuedata);
             },
             children: [
-              if (value.isExpanded)
+              if (providerData.isExpanded)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const TextField(
+                      TextField(
+                        controller: providerData.transactionCodeController,
                         decoration: InputDecoration(
                           hintText: 'Transaction ID',
                         ),
                       ),
                       const SizedBox(height: 13.0),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: providerData
+                                    .transactionCodeController.text.isEmpty ||
+                                providerData.isUnderReview
+                            ? null
+                            : () {
+                                providerData.transactionSubmit(context);
+                              },
                         child: Container(
                           // ignore: sort_child_properties_last
-                          child: const Padding(
-                            padding: EdgeInsets.all(13.0),
-                            child: Text(
-                              "Submit",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(13.0),
+                            child: providerData.isSubmitLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : const Text(
+                                    "Submit",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
                           ),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),

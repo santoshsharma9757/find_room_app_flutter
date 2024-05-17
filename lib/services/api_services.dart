@@ -70,8 +70,8 @@ class NetworkApiService {
 
   postImageWithBody(url, queryParameters, List<XFile> image) async {
     // String? accessToken = UserSimplePreferences.getUserAccessToken();
-    var token = await _appUrl.readToken();
-    print(image);
+     var token = await _appUrl.readToken();
+    log("SSSSTOKEN:$token");
     var headers = {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token'

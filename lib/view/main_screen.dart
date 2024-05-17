@@ -19,6 +19,7 @@ class _MyWidgetState extends State<HomeScreen> {
   void initState() {
     final provider = Provider.of<RoomViewModel>(context, listen: false);
     provider.initCall(context);
+    
     super.initState();
   }
 

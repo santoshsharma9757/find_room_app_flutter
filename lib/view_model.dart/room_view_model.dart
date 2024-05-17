@@ -210,6 +210,10 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   Future transactionValidate(BuildContext context) async {
+    if (isUnderReview) {
+      Utils.showMyDialog("Your payment is under progress please wait 10-20 min",
+          context, "Verifying...");
+    }
     var user_id = await _appUrl.readUserId();
 
     var bodyToSend = {"userid": "adb99804-55f8-4c3d-9873-b4553a367893"};
@@ -217,7 +221,10 @@ class RoomViewModel extends ChangeNotifier {
     try {
       final response = await _roomRepo.transactionValidate(context, bodyToSend);
       log("RESPONSE USER upload Trancation: $response");
+
       if (response != null) {
+        _isUnderReview = false;
+
         String message = response["message"];
         log("MESSAFE:::$message");
         if (message == "You do not have access.") {
@@ -241,6 +248,57 @@ class RoomViewModel extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
+      log('Erroer $e');
+    }
+  }
+
+  TextEditingController _transactionCodeController = TextEditingController();
+  TextEditingController get transactionCodeController =>
+      this._transactionCodeController;
+
+  set transactionCodeController(TextEditingController value) =>
+      this._transactionCodeController = value;
+
+  bool _isSubmitLoading = false;
+  get isSubmitLoading => _isSubmitLoading;
+
+  setIsSubmitLoading(bool value) {
+    _isSubmitLoading = value;
+    notifyListeners();
+  }
+
+  bool _isUnderReview = false;
+  get isUnderReview => this._isUnderReview;
+
+  setIsUnderReview(value) {
+    this._isUnderReview = value;
+  }
+
+  Future transactionSubmit(BuildContext context) async {
+    setIsSubmitLoading(true);
+    var user_id = await _appUrl.readUserId();
+
+    var bodyToSend = {
+      "user": "adb99804-55f8-4c3d-9873-b4553a367893",
+      "transaction_id": _transactionCodeController.text
+    };
+    log("UPLOAD BODYTOSEND For TRANSaction Submit $bodyToSend");
+    try {
+      final response = await _roomRepo.transactionSubmit(context, bodyToSend);
+      log("RESPONSE USER upload Trancation: $response");
+      setIsSubmitLoading(false);
+      if (response != null) {
+        _isUnderReview = true;
+        Navigator.pop(context);
+        _transactionCodeController.clear();
+        Utils.showMyDialog(
+            "Your payment is under progress please wait 10-20 min",
+            context,
+            "Verifying...");
+        notifyListeners();
+      }
+    } catch (e) {
+      setIsSubmitLoading(false);
       log('Erroer $e');
     }
   }
