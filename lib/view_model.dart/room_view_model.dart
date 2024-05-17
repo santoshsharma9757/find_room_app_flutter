@@ -216,7 +216,7 @@ class RoomViewModel extends ChangeNotifier {
     }
     var user_id = await _appUrl.readUserId();
 
-    var bodyToSend = {"userid": "adb99804-55f8-4c3d-9873-b4553a367893"};
+    var bodyToSend = {"userid":user_id};
     log("UPLOAD BODYTOSEND For TRANSaction $bodyToSend");
     try {
       final response = await _roomRepo.transactionValidate(context, bodyToSend);
@@ -279,7 +279,7 @@ class RoomViewModel extends ChangeNotifier {
     var user_id = await _appUrl.readUserId();
 
     var bodyToSend = {
-      "user": "adb99804-55f8-4c3d-9873-b4553a367893",
+      "user": user_id,
       "transaction_id": _transactionCodeController.text
     };
     log("UPLOAD BODYTOSEND For TRANSaction Submit $bodyToSend");

@@ -69,14 +69,14 @@ class AuthViewModel extends ChangeNotifier {
     var bodyToSend = {
       "name": nameController.text,
       "email": emailController.text,
-      "mobile": "+977${mobileController.text}",
-      "city": _selectedDistrict,
+      "mobile": "+91${mobileController.text}",
+      "city": "Kathmandu",
       "district": _selectedDistrict,
       "address": addressController.text,
       "password": passwordController.text,
       "password2": confirmPasswordController.text
     };
-
+   log("SSSTEDTTSS $bodyToSend");
     setRegisterLoader(true);
     try {
       final response = await _authRepo.registerUser(context, bodyToSend);
