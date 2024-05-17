@@ -1,6 +1,8 @@
 import 'package:find_your_room_nepal/view/upload_room.dart';
+import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
+import 'package:provider/provider.dart';
 
 class Utils {
   static snackBar(String message, BuildContext context) {
@@ -82,10 +84,7 @@ class Utils {
                               ),
                             ),
                           )),
-                      const SizedBox(
-                        height: 5
-                      ),
-
+                      const SizedBox(height: 5),
                       Text(
                         title,
                         style: const TextStyle(
@@ -93,7 +92,6 @@ class Utils {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-
                       const SizedBox(height: 35),
                       GestureDetector(
                         onTap: () {
@@ -142,26 +140,6 @@ class Utils {
                         ),
                       ),
                       const SizedBox(height: 22),
-                      // Align(
-                      //   alignment: Alignment.bottomRight,
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       Navigator.of(context).pop();
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(15),
-                      //       ),
-                      //     ),
-                      //     child: const Text(
-                      //       "Close",
-                      //       style: TextStyle(
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -170,4 +148,150 @@ class Utils {
       },
     );
   }
+
+  static showSubscriptionDialogForQRScanner(
+    String title,
+    String message,
+    BuildContext context,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(
+                      top: 20, left: 20, right: 20, bottom: 20),
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black,
+                        offset: Offset(0, 10),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Scrollbar(
+                    isAlwaysShown: true,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        // mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Align(
+                              alignment: Alignment.topRight,
+                              child: Container(
+                                width:
+                                    30, // Adjust the width and height as needed
+                                height: 30,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.indigo,
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.close_rounded,
+                                    color: Colors.white,
+                                    size: 15,
+                                  ),
+                                ),
+                              )),
+                          const SizedBox(height: 5),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 35),
+                          Image.asset(
+                            "assets/qr_code.jpeg",
+                            height: 250,
+                            width: 200,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(height: 35),
+                          _buildExpansionTile(),
+                          const SizedBox(height: 22),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ));
+      },
+    );
+  }
+}
+
+_buildExpansionTile() {
+  return Consumer<RoomViewModel>(
+    builder: (context, value, child) => Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ExpansionTile(
+            initiallyExpanded: true,
+            title: const Text(
+              'Click to add transaction ID',
+              style: TextStyle(fontSize: 13),
+            ),
+            onExpansionChanged: (valuedata) {
+              value.setIsExpanded(valuedata);
+            },
+            children: [
+              if (value.isExpanded)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Transaction ID',
+                        ),
+                      ),
+                      const SizedBox(height: 13.0),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          // ignore: sort_child_properties_last
+                          child: const Padding(
+                            padding: EdgeInsets.all(13.0),
+                            child: Text(
+                              "Submit",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.indigo),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }

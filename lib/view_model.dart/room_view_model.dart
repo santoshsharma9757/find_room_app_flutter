@@ -4,6 +4,7 @@ import 'package:find_your_room_nepal/constant/api_url.dart';
 import 'package:find_your_room_nepal/repository/auth_repo.dart';
 import 'package:find_your_room_nepal/repository/room_repo.dart';
 import 'package:find_your_room_nepal/utils/utils.dart';
+import 'package:find_your_room_nepal/view/upload_room.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,7 +29,7 @@ class RoomViewModel extends ChangeNotifier {
     await getRoom(context);
   }
 
-  getRoom(BuildContext context, [bool isDropdownChanged=false]) async {
+  getRoom(BuildContext context, [bool isDropdownChanged = false]) async {
     setRoomLoader(true);
     try {
       var response;
@@ -123,7 +124,7 @@ class RoomViewModel extends ChangeNotifier {
   set userData(value) => _userData = value;
 
   getUserDetail(BuildContext context) async {
-    _selectedDistrict="";
+    _selectedDistrict = "";
     setRoomLoader(true);
     try {
       final response = await _roomRepo.getUserDetail(context);
@@ -195,6 +196,51 @@ class RoomViewModel extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       setIsDistrictLoading(false);
+      log('Erroer $e');
+    }
+  }
+
+  bool _isExpanded = false;
+
+  get isExpanded => this._isExpanded;
+
+  setIsExpanded(value) {
+    this._isExpanded = value;
+    notifyListeners();
+  }
+
+  Future transactionValidate(BuildContext context) async {
+    var user_id = await _appUrl.readUserId();
+
+    var bodyToSend = {"userid": "adb99804-55f8-4c3d-9873-b4553a367893"};
+    log("UPLOAD BODYTOSEND For TRANSaction $bodyToSend");
+    try {
+      final response = await _roomRepo.transactionValidate(context, bodyToSend);
+      log("RESPONSE USER upload Trancation: $response");
+      if (response != null) {
+        String message = response["message"];
+        log("MESSAFE:::$message");
+        if (message == "You do not have access.") {
+          _appUrl.storeToken("");
+          // Utils.showSubscriptionDialog(
+          //     "Unlock premium features with our subscription plan.Rs:10/Month"
+          //         .toString(),
+          //     "Subscribe Now",
+          //     context);
+          Utils.showSubscriptionDialogForQRScanner(
+              "Unlock premium features with our subscription plan.Rs:10/Month"
+                  .toString(),
+              "Subscribe Now",
+              context);
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return UploadYourRoomScreen();
+          }));
+        }
+
+        notifyListeners();
+      }
+    } catch (e) {
       log('Erroer $e');
     }
   }

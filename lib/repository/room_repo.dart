@@ -131,6 +131,9 @@ class RoomRepository {
     }
   }
 
+
+
+
   loginUser(BuildContext context, var bodyToSend) async {
     try {
       final response = await _networkService
@@ -148,4 +151,28 @@ class RoomRepository {
       throw e;
     }
   }
+
+
+
+
+    transactionValidate(BuildContext context, var bodyToSend ) async {
+    try {
+      final response = await _networkService
+          .getPostApiResponse(
+              'http://192.168.1.67:8000/api/verify/transaction/validate/', bodyToSend,)
+          .catchError((error, stackTrace) {
+        Utils.showMyDialog(error.toString(), context);
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
+
 }

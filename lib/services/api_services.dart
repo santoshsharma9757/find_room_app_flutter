@@ -46,16 +46,19 @@ class NetworkApiService {
 
   Future getPostApiResponse(String url, dynamic data) async {
     dynamic responseJson;
+    log("URL:::$url");
+    log("BODYTODSEDN:SSSL:$data");
 
     try {
       Response response = await post(
-        Uri.parse(url), body: data,
+        Uri.parse(url), body: jsonEncode(data),
 
-        // headers: {
-        //   "Accept":"application/json",
-        //   "Authorization":"Token ${AppUrl.token}"
-        // }
-      ).timeout(Duration(seconds: 10));
+        headers: {
+           "Content-Type": "application/json",
+          // "Authorization":"Token ${AppUrl.token}"
+        }
+      );
+      log("RESPONSE::::${response.body}and ${response.statusCode}");
 
       responseJson = returnResponse(response);
     } on SocketException {

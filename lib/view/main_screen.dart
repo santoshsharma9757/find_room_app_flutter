@@ -1,5 +1,4 @@
 import 'package:find_your_room_nepal/constant/api_url.dart';
-import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view/login_screen.dart';
 import 'package:find_your_room_nepal/view/room_details.dart';
 import 'package:find_your_room_nepal/view/see_all_room.dart';
@@ -29,6 +28,7 @@ class _MyWidgetState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<RoomViewModel>(context);
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: _buildDrawer(context),
@@ -41,21 +41,19 @@ class _MyWidgetState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(bottom: 50.0),
-        child: FloatingActionButton.extended(
-          elevation: 50,
-          onPressed: () {
-            _appUrl.storeToken("");
-            Utils.showSubscriptionDialog(
-                "Unlock premium features with our subscription plan.Rs:10/Month"
-                    .toString(),
-                "Subscribe Now",
-                context);
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Post'),
-          backgroundColor: Colors.red,
+      floatingActionButton: Consumer<RoomViewModel>(
+        builder: (context, value, child) => Container(
+          margin: const EdgeInsets.only(bottom: 50.0),
+          child: FloatingActionButton.extended(
+            elevation: 50,
+            onPressed: () async {
+              await provider.transactionValidate(context);
+              
+            },
+            icon: const Icon(Icons.add),
+            label: const Text('Post'),
+            backgroundColor: Colors.red,
+          ),
         ),
       ),
     );
