@@ -76,7 +76,7 @@ class AuthViewModel extends ChangeNotifier {
       "password": passwordController.text,
       "password2": confirmPasswordController.text
     };
-   log("SSSTEDTTSS $bodyToSend");
+    log("SSSTEDTTSS $bodyToSend");
     setRegisterLoader(true);
     try {
       final response = await _authRepo.registerUser(context, bodyToSend);
@@ -121,11 +121,39 @@ class AuthViewModel extends ChangeNotifier {
         _appUrl.storeToken(response['token']['access']);
         _appUrl.storeUserId(response['user']);
         Utils.snackBar("User Login Successfully".toString(), context);
-        loginEmailController.text="";
-        loginPasswordController.text="";
+        loginEmailController.text = "";
+        loginPasswordController.text = "";
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return HomeScreen();
         }));
+      }
+      setLoginLoader(false);
+    } catch (e) {
+      setLoginLoader(false);
+      log('Erroer $e');
+    }
+  }
+
+  resetUserPassword(BuildContext context) async {
+    log("MOBILE NUMBER ${mobileController.text}");
+    // loginEmailController.text = "";
+    // loginPasswordController.text = "";
+    var bodyToSend = {
+      "email": loginEmailController.text,
+      "new_password": loginPasswordController.text
+    };
+
+    log("RESPONSE USER Login: $bodyToSend");
+
+    setLoginLoader(true);
+    try {
+      final response = await _authRepo.resetUserPassword(context, bodyToSend);
+      log("RESPONSE USER Login: $response");
+      if (response != null) {
+        Utils.snackBar("Password Reset Successfully".toString(), context);
+        loginEmailController.text = "";
+        loginPasswordController.text = "";
+        Navigator.pop(context);
       }
       setLoginLoader(false);
     } catch (e) {

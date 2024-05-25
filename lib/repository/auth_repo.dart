@@ -60,4 +60,24 @@ class AuthRepository {
       throw e;
     }
   }
+
+
+
+   resetUserPassword(BuildContext context, var bodyToSend) async {
+    try {
+      final response = await _networkService
+          .getPostApiResponse(
+              '${AppUrl.primaryUrl}/api/user/reset-password/', bodyToSend)
+          .catchError((error, stackTrace) {
+        Utils.showMyDialog(error.toString(), context);
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

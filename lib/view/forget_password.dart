@@ -1,23 +1,19 @@
 import 'dart:developer';
 
 import 'package:find_your_room_nepal/constant/app_text.dart';
-import 'package:find_your_room_nepal/view/forget_password.dart';
-import 'package:find_your_room_nepal/view/register_screen.dart';
 import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:validation_plus/validate.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({super.key});
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   bool _obscureText = true;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +36,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: MediaQuery.of(context).size.height * 0.1,
                 ),
                 const Text(
-                  'Welcome,',
+                  'Reset your password',
                   style: AppTextStyle.boldTitle,
                 ),
-                const Text(
-                  'Sign in to continue!',
-                  style: AppTextStyle.greySubTitle,
-                ),
+                // const Text(
+                //   'Sign in to continue!',
+                //   style: AppTextStyle.greySubTitle,
+                // ),
               ],
             ),
           ),
@@ -136,17 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return ForgetPasswordScreen();
-                          }));
-                        },
-                        child: const Align(
-                            alignment: Alignment.topRight,
-                            child: Text('Forget password?',
-                                style: TextStyle(color: Colors.blue))),
-                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.05,
                       ),
@@ -159,52 +144,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              provider.loginUser(context);
+                              provider.resetUserPassword(context);
                             },
                             child: Padding(
                               padding: EdgeInsets.all(16.0),
                               child: Center(
                                 child: value.loginLoader
                                     ? CircularProgressIndicator()
-                                    : Text('LOGIN',
+                                    : Text('RESET',
                                         style: AppTextStyle.buttonText),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    
-                    
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const RegisterScreen();
-                          }));
-                        },
-                        child: Center(
-                          child: RichText(
-                            text: const TextSpan(
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black,
-                              ),
-                              children: <TextSpan>[
-                                TextSpan(text: "Don't have account ? "),
-                                TextSpan(
-                                  text: 'Signup',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.indigo,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),

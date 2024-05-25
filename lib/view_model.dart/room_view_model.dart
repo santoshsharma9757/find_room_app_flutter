@@ -109,6 +109,10 @@ class RoomViewModel extends ChangeNotifier {
       if (response != null) {
         Utils.snackBar("Room posted successfully!!!", context);
         getRoom(context);
+        addressController.text = "";
+        priceController.text = "";
+        descriptionController.text = "";
+        images!.clear();
         Navigator.pop(context);
       }
     } catch (e) {
@@ -216,7 +220,7 @@ class RoomViewModel extends ChangeNotifier {
     }
     var user_id = await _appUrl.readUserId();
 
-    var bodyToSend = {"userid":user_id};
+    var bodyToSend = {"userid": user_id};
     log("UPLOAD BODYTOSEND For TRANSaction $bodyToSend");
     try {
       final response = await _roomRepo.transactionValidate(context, bodyToSend);

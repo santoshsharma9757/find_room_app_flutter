@@ -159,7 +159,7 @@ class RoomRepository {
     try {
       final response = await _networkService
           .getPostApiResponse(
-              'http://192.168.1.67:8000/api/verify/transaction/validate/', bodyToSend,)
+              'http://192.168.0.126:8000/api/verify/transaction/validate/', bodyToSend,)
           .catchError((error, stackTrace) {
         Utils.showMyDialog(error.toString(), context);
         if (kDebugMode) {
@@ -178,7 +178,7 @@ class RoomRepository {
     try {
       final response = await _networkService
           .getPostApiResponse(
-              'http://192.168.1.67:8000/api/verify/transaction/', bodyToSend,)
+              'http://192.168.0.126:8000/api/verify/transaction/', bodyToSend,)
           .catchError((error, stackTrace) {
         Utils.showMyDialog(error.toString(), context);
         if (kDebugMode) {

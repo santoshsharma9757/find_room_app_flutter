@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:find_your_room_nepal/constant/app_text.dart';
+import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
 import 'package:find_your_room_nepal/view_model.dart/room_view_model.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +75,8 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                                 );
                               }).toList(),
                               onChanged: (value) {
-                                provider
-                                    .setSelectedDistrict(value.toString(),context);
+                                provider.setSelectedDistrict(
+                                    value.toString(), context);
                               },
                             ),
                           ),
@@ -200,7 +201,7 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                     ),
                   ),
                 ),
-              
+
                 Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
@@ -208,9 +209,14 @@ class _UploadYourRoomScreenState extends State<UploadYourRoomScreen> {
                     color: Colors.indigo,
                   ),
                   child: InkWell(
-                    onTap: () {
-                      provider.uploadRoom(context);
-                    },
+                    onTap: provider.images!.isEmpty||provider.addressController.text.isEmpty||
+                    provider.descriptionController.text.isEmpty|| provider.priceController.text.isEmpty
+                        ? () {
+                            Utils.showMyDialog("All data required!!!", context,"Attention!!!");
+                          }
+                        : () {
+                            provider.uploadRoom(context);
+                          },
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Center(
@@ -240,6 +246,7 @@ class OutlineTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      keyboardType: hintText == "Price" ? TextInputType.number : null,
       decoration: InputDecoration(
         hintText: hintText,
         border: const OutlineInputBorder(),
