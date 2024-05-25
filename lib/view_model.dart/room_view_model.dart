@@ -258,6 +258,10 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
+  refresh(){
+    notifyListeners();
+  }
+
   TextEditingController _transactionCodeController = TextEditingController();
   TextEditingController get transactionCodeController =>
       this._transactionCodeController;

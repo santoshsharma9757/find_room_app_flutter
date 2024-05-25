@@ -252,6 +252,9 @@ _buildTransactionField() {
               hintText: 'Transaction ID',
               border: OutlineInputBorder(),
             ),
+            onChanged: (value){
+              providerData.refresh();
+            },
           ),
         ),
         const SizedBox(height: 13.0),
