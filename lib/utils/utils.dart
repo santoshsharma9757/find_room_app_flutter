@@ -225,7 +225,8 @@ class Utils {
                             fit: BoxFit.cover,
                           ),
                           const SizedBox(height: 35),
-                          _buildExpansionTile(),
+                          // _buildExpansionTile(),
+                          _buildTransactionField(),
                           const SizedBox(height: 22),
                         ],
                       ),
@@ -237,6 +238,58 @@ class Utils {
       },
     );
   }
+}
+
+_buildTransactionField() {
+  return Consumer<RoomViewModel>(
+    builder: (context, providerData, child) => Column(
+      children: [
+        SizedBox(
+          height: 40,
+          child: TextField(
+            controller: providerData.transactionCodeController,
+            decoration: InputDecoration(
+              hintText: 'Transaction ID',
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
+        const SizedBox(height: 13.0),
+        GestureDetector(
+          onTap: providerData.transactionCodeController.text.isEmpty
+              ? () {
+                  Utils.showMyDialog(
+                      "Your trancation ID is empty", context, "Attention!!!");
+                }
+              : providerData.isUnderReview
+                  ? () {
+                      Utils.showMyDialog(
+                          "Your payment is under progress please wait 10-20 min",
+                          context,
+                          "Verifying...");
+                    }
+                  : () {
+                      providerData.transactionSubmit(context);
+                    },
+          child: Container(
+            // ignore: sort_child_properties_last
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: providerData.isSubmitLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : const Text(
+                      "Submit",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), color: Colors.indigo),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 _buildExpansionTile() {

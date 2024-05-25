@@ -104,6 +104,9 @@ class NetworkApiService {
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());
+      case 401:
+       dynamic responseJson = jsonDecode(response.body);
+        throw BadRequestException(responseJson['error'].toString());  
       case 500:
       case 404:
         throw UnauthorisedException(response.body.toString());

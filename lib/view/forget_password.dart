@@ -36,10 +36,24 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.1,
                 ),
-                const Text(
-                  'Reset your password',
-                  style: AppTextStyle.boldTitle,
+
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        )),
+                    const Text(
+                      'Reset your password',
+                      style: AppTextStyle.boldTitle,
+                    ),
+                  ],
                 ),
+
                 // const Text(
                 //   'Sign in to continue!',
                 //   style: AppTextStyle.greySubTitle,

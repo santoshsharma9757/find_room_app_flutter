@@ -244,6 +244,8 @@ class RoomViewModel extends ChangeNotifier {
               "Subscribe Now",
               context);
         } else {
+          Utils.snackBar(
+              "Your Review completed you can able to post room!!!", context);
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return UploadYourRoomScreen();
           }));
