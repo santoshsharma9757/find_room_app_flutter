@@ -1,6 +1,7 @@
 // import 'package:eshop/res/app_text_style.dart';
 // import 'package:eshop/view_model/signup_view_model.dart';
 import 'package:find_your_room_nepal/constant/app_text.dart';
+import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -235,9 +236,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.indigo,
                           ),
                           child: InkWell(
-                            onTap: () {
-                              provider.registerUser(context);
-                            },
+                            onTap: provider.nameController.text.isEmpty ||
+                                    provider.emailController.text.isEmpty ||
+                                    provider.mobileController.text.isEmpty ||
+                                    provider.addressController.text.isEmpty ||
+                                    provider.passwordController.text.isEmpty ||
+                                    provider
+                                        .confirmPasswordController.text.isEmpty
+                                ? () {
+                                    Utils.showMyDialog("All data required!!!",
+                                        context, "Attention!!!");
+                                  }
+                                : () {
+                                    provider.registerUser(context);
+                                  },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Center(

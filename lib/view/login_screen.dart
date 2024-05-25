@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:find_your_room_nepal/constant/app_text.dart';
+import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view/forget_password.dart';
 import 'package:find_your_room_nepal/view/register_screen.dart';
 import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
@@ -158,7 +159,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.indigo,
                           ),
                           child: InkWell(
-                            onTap: () {
+                            onTap:provider.emailController.text.isEmpty||
+                            provider.passwordController.text.isEmpty?
+                            (){
+                              Utils.showMyDialog("All data required!!!",
+                                        context, "Attention!!!");
+
+                            }:
+                            
+                            
+                             () {
                               provider.loginUser(context);
                             },
                             child: Padding(

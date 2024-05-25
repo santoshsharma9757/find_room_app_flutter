@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:find_your_room_nepal/constant/app_text.dart';
+import 'package:find_your_room_nepal/utils/utils.dart';
 import 'package:find_your_room_nepal/view_model.dart/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -143,9 +144,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             color: Colors.indigo,
                           ),
                           child: InkWell(
-                            onTap: () {
-                              provider.resetUserPassword(context);
-                            },
+                            onTap: provider.emailController.text.isEmpty ||
+                                    provider.passwordController.text.isEmpty
+                                ? () {
+                                    Utils.showMyDialog("All data required!!!",
+                                        context, "Attention!!!");
+                                  }
+                                : () {
+                                    provider.resetUserPassword(context);
+                                  },
                             child: Padding(
                               padding: EdgeInsets.all(16.0),
                               child: Center(
